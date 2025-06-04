@@ -1,3 +1,7 @@
+// Load environment variables first, before any other imports
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { app, BrowserWindow, shell } from "electron";
 import { APP_CONFIG } from "../shared/constants/app-constants";
 import { createMainWindow } from "./windows/main-window";

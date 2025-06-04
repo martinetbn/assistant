@@ -3,7 +3,7 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 import { IPC_CHANNELS } from '../shared/constants/ipc-channels';
-import { IPCResponse, SystemInfo, NotificationOptions } from '../shared/types';
+import { IPCResponse, SystemInfo, NotificationOptions, CalendarData } from '../shared/types';
 
 /**
  * Electron API exposed to the renderer process
@@ -41,6 +41,22 @@ const electronAPI = {
       ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_INFO),
     showNotification: (options: NotificationOptions): Promise<IPCResponse<void>> => 
       ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SHOW_NOTIFICATION, options),
+  },
+
+  // Calendar
+  calendar: {
+    getEvents: (): Promise<IPCResponse<CalendarData>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.CALENDAR_GET_EVENTS),
+    startSync: (): Promise<IPCResponse<void>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.CALENDAR_START_SYNC),
+    stopSync: (): Promise<IPCResponse<void>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.CALENDAR_STOP_SYNC),
+    onDataUpdated: (callback: (data: CalendarData) => void) => {
+      ipcRenderer.on('calendar:data-updated', (_, data) => callback(data));
+    },
+    removeDataUpdatedListener: (callback: (data: CalendarData) => void) => {
+      ipcRenderer.removeListener('calendar:data-updated', callback as any);
+    },
   },
 };
 

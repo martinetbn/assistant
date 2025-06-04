@@ -26,6 +26,11 @@ export const IPC_CHANNELS = {
   // System
   SYSTEM_GET_INFO: 'system:get-info',
   SYSTEM_SHOW_NOTIFICATION: 'system:show-notification',
+  
+  // Calendar
+  CALENDAR_GET_EVENTS: 'calendar:get-events',
+  CALENDAR_START_SYNC: 'calendar:start-sync',
+  CALENDAR_STOP_SYNC: 'calendar:stop-sync',
 } as const;
 
 export type IPCChannel = typeof IPC_CHANNELS[keyof typeof IPC_CHANNELS]; 

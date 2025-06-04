@@ -60,6 +60,34 @@ export interface SystemInfo {
   freeMemory: number;
 }
 
+// Calendar Types
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  description?: string;
+  startDate: Date;
+  endDate: Date;
+  location?: string;
+  isAllDay: boolean;
+  recurrence?: string;
+  status: 'confirmed' | 'tentative' | 'cancelled';
+  organizer?: {
+    name?: string;
+    email?: string;
+  };
+  attendees?: Array<{
+    name?: string;
+    email?: string;
+    status: 'accepted' | 'declined' | 'tentative' | 'needs-action';
+  }>;
+}
+
+export interface CalendarData {
+  events: CalendarEvent[];
+  lastUpdated: Date;
+  totalEvents: number;
+}
+
 // IPC Message Types
 export interface IPCMessage<T = any> {
   channel: string;

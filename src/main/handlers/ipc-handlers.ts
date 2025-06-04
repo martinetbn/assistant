@@ -1,9 +1,13 @@
 import { ipcMain, dialog, app, BrowserWindow } from "electron";
 import { IPC_CHANNELS } from "../../shared/constants/ipc-channels";
-import { IPCResponse, SystemInfo, FileInfo } from "../../shared/types";
+import { IPCResponse, SystemInfo, FileInfo, CalendarData } from "../../shared/types";
+import { CalendarService } from "../services/calendar-service";
 import fs from "fs";
 import path from "path";
 import os from "os";
+
+// Initialize calendar service
+const calendarService = new CalendarService();
 
 /**
  * Setup all IPC handlers for communication between main and renderer processes
@@ -142,6 +146,54 @@ export const setupIpcHandlers = (): void => {
       });
       
       notification.show();
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  // Calendar Operations
+  ipcMain.handle(IPC_CHANNELS.CALENDAR_GET_EVENTS, async (): Promise<IPCResponse<CalendarData>> => {
+    try {
+      if (!calendarService.isConfigured()) {
+        return { success: false, error: 'Calendar service not configured. Please set SECRET_ICAL_ADDRESS environment variable.' };
+      }
+
+      // Return cached data if available, otherwise fetch fresh data
+      const cachedData = calendarService.getLastFetchedData();
+      if (cachedData) {
+        return { success: true, data: cachedData };
+      }
+
+      const data = await calendarService.fetchCalendarData();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.CALENDAR_START_SYNC, async (): Promise<IPCResponse<void>> => {
+    try {
+      if (!calendarService.isConfigured()) {
+        return { success: false, error: 'Calendar service not configured. Please set SECRET_ICAL_ADDRESS environment variable.' };
+      }
+
+      calendarService.startPeriodicSync((data) => {
+        // Broadcast calendar updates to all renderer windows
+        BrowserWindow.getAllWindows().forEach(window => {
+          window.webContents.send('calendar:data-updated', data);
+        });
+      });
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.CALENDAR_STOP_SYNC, async (): Promise<IPCResponse<void>> => {
+    try {
+      calendarService.stopPeriodicSync();
       return { success: true };
     } catch (error) {
       return { success: false, error: (error as Error).message };
