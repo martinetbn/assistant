@@ -24,7 +24,7 @@ A modern assistant desktop application made with **Electron**, **React**, **Type
 
 ```bash
 git clone <your-repo-url>
-cd electron-react-typescript-tailwind-starter
+cd assistant
 npm install
 ```
 
@@ -52,7 +52,7 @@ npm run lint
 ## 📁 Project Structure
 
 ```
-electron-react-typescript-tailwind-starter/
+assistant/
 ├── src/
 │   ├── main/              # Electron main process
 │   │   ├── index.ts       # Main process entry point

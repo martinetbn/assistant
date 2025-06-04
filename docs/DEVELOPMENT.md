@@ -27,7 +27,7 @@ This document provides detailed guidelines for developing with the Assistant pro
 
 ```bash
 git clone <your-repo-url>
-cd electron-react-typescript-tailwind-starter
+cd assistant
 npm install
 ```
 

@@ -17,7 +17,7 @@ Make sure you have the following installed:
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-cd electron-react-typescript-tailwind-starter
+cd assistant
 
 # Install dependencies
 npm install
