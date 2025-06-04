@@ -1,21 +1,26 @@
-import { BrowserWindow, BrowserWindowConstructorOptions } from "electron";
-import { APP_CONFIG } from "../../shared/constants/app-constants";
+import { BrowserWindow, BrowserWindowConstructorOptions, screen } from "electron";
 
 /**
  * Create and configure the main application window
  */
 export const createMainWindow = (options: Partial<BrowserWindowConstructorOptions> = {}): BrowserWindow => {
+  // Get the primary display dimensions for fullscreen
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize;
+
   const mainWindow = new BrowserWindow({
-    width: APP_CONFIG.DEFAULT_WINDOW.WIDTH,
-    height: APP_CONFIG.DEFAULT_WINDOW.HEIGHT,
-    minWidth: APP_CONFIG.DEFAULT_WINDOW.MIN_WIDTH,
-    minHeight: APP_CONFIG.DEFAULT_WINDOW.MIN_HEIGHT,
+    width: screenWidth,
+    height: screenHeight,
+    x: 0,
+    y: 0,
     show: false, // Don't show until ready
     transparent: true, // Make window transparent
     frame: false, // Remove window frame for better transparency
     alwaysOnTop: true, // Keep window always on top
     skipTaskbar: true, // Don't show in taskbar
     resizable: false, // Disable resizing for consistent behavior
+    fullscreen: false, // Don't use fullscreen mode (we want manual control)
+    kiosk: false,
     webPreferences: {
       nodeIntegration: false, // Security: Disable node integration
       contextIsolation: true, // Security: Enable context isolation
@@ -30,9 +35,8 @@ export const createMainWindow = (options: Partial<BrowserWindowConstructorOption
     mainWindow.show();
   });
 
-  // Make window click-through when not actively being used
-  // This allows interactions with windows below
-  mainWindow.setIgnoreMouseEvents(false);
+  // Make window completely click-through so interactions pass to windows below
+  mainWindow.setIgnoreMouseEvents(true, { forward: true });
 
   return mainWindow;
 }; 

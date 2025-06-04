@@ -9,14 +9,6 @@ export const APP_CONFIG = {
   VERSION: "1.0.0",
   DESCRIPTION: "A transparent background assistant application",
 
-  // Window Configuration
-  DEFAULT_WINDOW: {
-    WIDTH: 400,
-    HEIGHT: 300,
-    MIN_WIDTH: 300,
-    MIN_HEIGHT: 200,
-  },
-
   // Development
   DEV_TOOLS: process.env.NODE_ENV === "development",
 
