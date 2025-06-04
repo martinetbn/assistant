@@ -57,6 +57,11 @@ const App: React.FC = () => {
         >
           Test Notification
         </button>
+        
+        {/* Tray hint */}
+        <p className="text-white text-xs mt-4 opacity-60 drop-shadow-md">
+          Right-click the tray icon to access menu
+        </p>
       </div>
     </div>
   );
