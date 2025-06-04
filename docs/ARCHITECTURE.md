@@ -186,7 +186,7 @@ const [state, dispatch] = useReducer(reducer, initialState);
 const AppContext = createContext<AppContextType | null>(null);
 
 // Provider component
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export default function AppProvider({ children }: AppProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [theme, setTheme] = useState<Theme>('light');
 

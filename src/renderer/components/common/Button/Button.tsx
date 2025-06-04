@@ -1,45 +1,50 @@
-import React from 'react';
-import { ButtonProps } from './Button.types';
+import React from "react";
+import { ButtonProps } from "./Button.types";
 
 /**
  * Reusable Button Component
  */
-export const Button: React.FC<ButtonProps> = ({
+export default function Button({
   children,
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   disabled = false,
   loading = false,
   onClick,
-  className = '',
+  className = "",
   ...props
-}) => {
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
+}: ButtonProps) {
+  const baseClasses =
+    "inline-flex items-center justify-center font-medium rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
+
   const variantClasses = {
-    primary: 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
-    danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',
-    success: 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500',
-    warning: 'bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500',
+    primary: "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500",
+    secondary:
+      "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500",
+    danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500",
+    success: "bg-green-500 text-white hover:bg-green-600 focus:ring-green-500",
+    warning:
+      "bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500",
   };
-  
+
   const sizeClasses = {
-    small: 'px-3 py-1.5 text-sm',
-    medium: 'px-4 py-2 text-base',
-    large: 'px-6 py-3 text-lg',
+    small: "px-3 py-1.5 text-sm",
+    medium: "px-4 py-2 text-base",
+    large: "px-6 py-3 text-lg",
   };
-  
-  const disabledClasses = 'opacity-50 cursor-not-allowed';
-  
+
+  const disabledClasses = "opacity-50 cursor-not-allowed";
+
   const classes = [
     baseClasses,
     variantClasses[variant],
     sizeClasses[size],
     disabled && disabledClasses,
     className,
-  ].filter(Boolean).join(' ');
-  
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <button
       className={classes}
@@ -72,4 +77,4 @@ export const Button: React.FC<ButtonProps> = ({
       {children}
     </button>
   );
-}; 
+}

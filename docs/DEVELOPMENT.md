@@ -132,7 +132,7 @@ const user: any = { id: 1, name: 'John' };
 
 ```typescript
 // ✅ Good
-const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+export default function UserProfile({ user }: UserProfileProps) {
   const [loading, setLoading] = useState(false);
   
   return (
@@ -141,8 +141,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     </div>
   );
 };
-
-export default React.memo(UserProfile);
 ```
 
 ### Styling
@@ -187,11 +185,11 @@ import { ComponentProps } from './Component.types';
 /**
  * Component description
  */
-export const Component: React.FC<ComponentProps> = ({
+export default function Component({
   prop1,
   prop2,
   ...props
-}) => {
+}: ComponentProps) {
   // Component logic here
   
   return (
