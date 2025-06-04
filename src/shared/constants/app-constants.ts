@@ -7,14 +7,14 @@ export const APP_CONFIG = {
   // Application Info
   NAME: "Assistant",
   VERSION: "1.0.0",
-  DESCRIPTION: "A modern desktop application to assist with your daily tasks",
+  DESCRIPTION: "A transparent background assistant application",
 
   // Window Configuration
   DEFAULT_WINDOW: {
-    WIDTH: 1200,
-    HEIGHT: 800,
-    MIN_WIDTH: 800,
-    MIN_HEIGHT: 600,
+    WIDTH: 400,
+    HEIGHT: 300,
+    MIN_WIDTH: 300,
+    MIN_HEIGHT: 200,
   },
 
   // Development

@@ -30,10 +30,11 @@ const createWindow = (): void => {
   // Load the renderer
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open DevTools in development
-  if (APP_CONFIG.DEV_TOOLS) {
-    mainWindow.webContents.openDevTools();
-  }
+  // Open DevTools in development only when explicitly needed
+  // Commented out to avoid interference with transparency
+  // if (APP_CONFIG.DEV_TOOLS) {
+  //   mainWindow.webContents.openDevTools();
+  // }
 
   // Handle window closed
   mainWindow.on("closed", () => {
