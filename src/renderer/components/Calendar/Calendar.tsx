@@ -158,7 +158,8 @@ export const Calendar: React.FC = () => {
                 {isToday(dayDate) ? 'Today' : dayDate.toLocaleDateString('en-US', {
                   weekday: 'long',
                   month: 'short',
-                  day: 'numeric'
+                  day: 'numeric',
+                  year: 'numeric'
                 })}
               </div>
               
