@@ -30,13 +30,44 @@ export const createMainWindow = (options: Partial<BrowserWindowConstructorOption
     ...options,
   });
 
+  // Enhanced always-on-top with higher priority level
+  mainWindow.setAlwaysOnTop(true, 'screen-saver');
+
   // Show window when ready to prevent visual flash
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    // Re-enforce always-on-top after showing
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
   });
 
   // Make window completely click-through so interactions pass to windows below
   mainWindow.setIgnoreMouseEvents(true, { forward: true });
+
+  // Monitor and maintain always-on-top status
+  const enforceAlwaysOnTop = () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    }
+  };
+
+  // Re-enforce always-on-top on various events
+  mainWindow.on('focus', enforceAlwaysOnTop);
+  mainWindow.on('show', enforceAlwaysOnTop);
+  mainWindow.on('restore', enforceAlwaysOnTop);
+
+  // Periodic check to ensure window stays on top (every 2 seconds)
+  const alwaysOnTopInterval = setInterval(() => {
+    if (mainWindow && !mainWindow.isDestroyed() && mainWindow.isVisible()) {
+      mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    } else if (mainWindow && mainWindow.isDestroyed()) {
+      clearInterval(alwaysOnTopInterval);
+    }
+  }, 2000);
+
+  // Clean up interval when window is closed
+  mainWindow.on('closed', () => {
+    clearInterval(alwaysOnTopInterval);
+  });
 
   return mainWindow;
 }; 

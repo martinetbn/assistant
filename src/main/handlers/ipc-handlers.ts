@@ -48,6 +48,43 @@ export const setupIpcHandlers = (): void => {
     }
   });
 
+  ipcMain.handle(IPC_CHANNELS.WINDOW_BRING_TO_FRONT, async (): Promise<IPCResponse<void>> => {
+    try {
+      const focusedWindow = BrowserWindow.getFocusedWindow();
+      if (focusedWindow) {
+        // Force window to front with highest priority
+        focusedWindow.setAlwaysOnTop(true, 'screen-saver');
+        focusedWindow.show();
+        focusedWindow.focus();
+        focusedWindow.moveTop();
+      }
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.WINDOW_TOGGLE_ALWAYS_ON_TOP, async (): Promise<IPCResponse<boolean>> => {
+    try {
+      const focusedWindow = BrowserWindow.getFocusedWindow();
+      if (focusedWindow) {
+        const isCurrentlyOnTop = focusedWindow.isAlwaysOnTop();
+        const newState = !isCurrentlyOnTop;
+        
+        if (newState) {
+          focusedWindow.setAlwaysOnTop(true, 'screen-saver');
+        } else {
+          focusedWindow.setAlwaysOnTop(false);
+        }
+        
+        return { success: true, data: newState };
+      }
+      return { success: false, error: 'No focused window found' };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
   // File Operations
   ipcMain.handle(IPC_CHANNELS.FILE_OPEN, async (): Promise<IPCResponse<string | null>> => {
     try {

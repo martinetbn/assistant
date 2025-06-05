@@ -10,6 +10,8 @@ export const IPC_CHANNELS = {
   WINDOW_RESTORE: 'window:restore',
   WINDOW_CLOSE: 'window:close',
   WINDOW_TOGGLE_FULLSCREEN: 'window:toggle-fullscreen',
+  WINDOW_BRING_TO_FRONT: 'window:bring-to-front',
+  WINDOW_TOGGLE_ALWAYS_ON_TOP: 'window:toggle-always-on-top',
   
   // File Operations
   FILE_OPEN: 'file:open',

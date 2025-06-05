@@ -17,6 +17,10 @@ const electronAPI = {
       ipcRenderer.invoke(IPC_CHANNELS.WINDOW_MAXIMIZE),
     close: (): Promise<IPCResponse<void>> => 
       ipcRenderer.invoke(IPC_CHANNELS.WINDOW_CLOSE),
+    bringToFront: (): Promise<IPCResponse<void>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.WINDOW_BRING_TO_FRONT),
+    toggleAlwaysOnTop: (): Promise<IPCResponse<boolean>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.WINDOW_TOGGLE_ALWAYS_ON_TOP),
   },
 
   // File operations

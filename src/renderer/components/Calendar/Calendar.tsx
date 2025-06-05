@@ -135,7 +135,7 @@ export const Calendar: React.FC = () => {
   );
 
   return (
-    <div className="p-4 text-white bg-black/20 backdrop-blur-sm rounded-lg max-h-fit overflow-y-auto">
+    <div className="p-4 text-white bg-black/70 rounded-lg max-h-fit overflow-y-auto">
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold">Calendar</h2>
         <div className="text-xs text-white/60">

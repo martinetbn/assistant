@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { app, BrowserWindow, shell } from "electron";
+import { app, BrowserWindow, shell, globalShortcut } from "electron";
 import { APP_CONFIG } from "../shared/constants/app-constants";
 import { createMainWindow } from "./windows/main-window";
 import { setupIpcHandlers } from "./handlers/ipc-handlers";
@@ -73,6 +73,25 @@ const initializeApp = async (): Promise<void> => {
 
   // Create main window
   createWindow();
+
+  // Register global shortcuts
+  setupGlobalShortcuts();
+};
+
+/**
+ * Setup global keyboard shortcuts
+ */
+const setupGlobalShortcuts = (): void => {
+  // Ctrl+Alt+A to bring window to front
+  globalShortcut.register('CommandOrControl+Alt+A', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      // Force window to front with highest priority
+      mainWindow.setAlwaysOnTop(true, 'screen-saver');
+      mainWindow.show();
+      mainWindow.focus();
+      mainWindow.moveTop();
+    }
+  });
 };
 
 // App event handlers
@@ -98,6 +117,9 @@ app.on("activate", () => {
 app.on("before-quit", () => {
   isQuitting = true;
   destroyTray();
+  
+  // Unregister all global shortcuts
+  globalShortcut.unregisterAll();
 });
 
 // Security: Handle external links

@@ -1,11 +1,4 @@
-import {
-  Tray,
-  Menu,
-  nativeImage,
-  app,
-  BrowserWindow,
-  Notification,
-} from "electron";
+import { Tray, Menu, nativeImage, app, BrowserWindow } from "electron";
 import path from "path";
 
 let tray: Tray | null = null;
@@ -52,6 +45,16 @@ export const createTray = (mainWindow: BrowserWindow | null): Tray => {
     },
     {
       type: "separator",
+    },
+    {
+      label: "Shortcuts",
+      submenu: [
+        {
+          label: "Bring to Front",
+          accelerator: "CommandOrControl+Alt+A",
+          enabled: false, // Just for display
+        },
+      ],
     },
     {
       type: "separator",
