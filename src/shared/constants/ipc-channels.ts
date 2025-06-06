@@ -33,6 +33,14 @@ export const IPC_CHANNELS = {
   CALENDAR_GET_EVENTS: 'calendar:get-events',
   CALENDAR_START_SYNC: 'calendar:start-sync',
   CALENDAR_STOP_SYNC: 'calendar:stop-sync',
+  
+  // Notifications
+  NOTIFICATION_SAVE: 'notification:save',
+  NOTIFICATION_GET_ALL: 'notification:get-all',
+  NOTIFICATION_MARK_SHOWN: 'notification:mark-shown',
+  NOTIFICATION_MARK_DISMISSED: 'notification:mark-dismissed',
+  NOTIFICATION_CLEANUP_OLD: 'notification:cleanup-old',
+  NOTIFICATION_EXISTS: 'notification:exists',
 } as const;
 
 export type IPCChannel = typeof IPC_CHANNELS[keyof typeof IPC_CHANNELS]; 

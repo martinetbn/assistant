@@ -1,13 +1,14 @@
-import { ipcMain, dialog, app, BrowserWindow } from "electron";
+import { ipcMain, dialog, app, BrowserWindow, Notification } from "electron";
 import { IPC_CHANNELS } from "../../shared/constants/ipc-channels";
-import { IPCResponse, SystemInfo, FileInfo, CalendarData } from "../../shared/types";
+import { IPCResponse, SystemInfo, CalendarData, StoredNotification } from "../../shared/types";
 import { CalendarService } from "../services/calendar-service";
+import { NotificationStorageService } from "../services/notification-storage";
 import fs from "fs";
-import path from "path";
 import os from "os";
 
-// Initialize calendar service
+// Initialize services
 const calendarService = new CalendarService();
+const notificationStorage = new NotificationStorageService();
 
 /**
  * Setup all IPC handlers for communication between main and renderer processes
@@ -177,7 +178,7 @@ export const setupIpcHandlers = (): void => {
     try {
       // Note: For cross-platform notifications, you might want to use a library like node-notifier
       // For now, we'll use Electron's built-in notification system
-      const notification = new (require('electron').Notification)({
+      const notification = new Notification({
         title: options.title,
         body: options.body,
       });
@@ -236,4 +237,62 @@ export const setupIpcHandlers = (): void => {
       return { success: false, error: (error as Error).message };
     }
   });
+
+  // Notification Storage Operations
+  ipcMain.handle(IPC_CHANNELS.NOTIFICATION_SAVE, async (event, notification: StoredNotification): Promise<IPCResponse<void>> => {
+    try {
+      notificationStorage.saveNotification(notification);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.NOTIFICATION_GET_ALL, async (): Promise<IPCResponse<StoredNotification[]>> => {
+    try {
+      const notifications = notificationStorage.getUnshownNotifications();
+      return { success: true, data: notifications };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.NOTIFICATION_MARK_SHOWN, async (event, notificationId: string): Promise<IPCResponse<void>> => {
+    try {
+      notificationStorage.markAsShown(notificationId);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.NOTIFICATION_MARK_DISMISSED, async (event, notificationId: string): Promise<IPCResponse<void>> => {
+    try {
+      notificationStorage.markAsDismissed(notificationId);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.NOTIFICATION_CLEANUP_OLD, async (): Promise<IPCResponse<void>> => {
+    try {
+      notificationStorage.cleanupOldNotifications();
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.NOTIFICATION_EXISTS, async (event, notificationId: string): Promise<IPCResponse<boolean>> => {
+    try {
+      const exists = notificationStorage.notificationExists(notificationId);
+      return { success: true, data: exists };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  });
+
+  // Auto cleanup on startup
+  notificationStorage.autoCleanupIfNeeded();
 }; 

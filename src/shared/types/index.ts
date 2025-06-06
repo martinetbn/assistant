@@ -109,6 +109,30 @@ export interface NotificationOptions {
   silent?: boolean;
 }
 
+export interface StoredNotification {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  eventDescription?: string;
+  eventStartDate: Date;
+  eventEndDate: Date;
+  eventLocation?: string;
+  isImportant: boolean;
+  timing: {
+    timeMs: number;
+    label: string;
+  };
+  scheduledTime: Date;
+  createdAt: Date;
+  shown: boolean;
+  dismissed: boolean;
+}
+
+export interface NotificationStorage {
+  notifications: StoredNotification[];
+  lastCleanup: Date;
+}
+
 // Window Events
 export interface WindowEvent {
   type: 'minimize' | 'maximize' | 'restore' | 'close' | 'resize';

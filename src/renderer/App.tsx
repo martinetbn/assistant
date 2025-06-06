@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar } from "./components/Calendar";
+import { Notification } from "./components/Notification";
 
 /**
  * Main Application Component
@@ -7,10 +7,8 @@ import { Calendar } from "./components/Calendar";
  */
 export default function App() {
   return (
-    <div className="min-h-screen w-full flex items-end justify-center flex-col bg-transparent p-4">
-      <div className="w-80 max-w-sm">
-        <Calendar />
-      </div>
+    <div className="min-h-screen w-full bg-transparent">
+      <Notification />
     </div>
   );
 }

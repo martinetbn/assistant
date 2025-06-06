@@ -3,7 +3,7 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 import { IPC_CHANNELS } from '../shared/constants/ipc-channels';
-import { IPCResponse, SystemInfo, NotificationOptions, CalendarData } from '../shared/types';
+import { IPCResponse, SystemInfo, NotificationOptions, CalendarData, StoredNotification } from '../shared/types';
 
 /**
  * Electron API exposed to the renderer process
@@ -59,8 +59,24 @@ const electronAPI = {
       ipcRenderer.on('calendar:data-updated', (_, data) => callback(data));
     },
     removeDataUpdatedListener: (callback: (data: CalendarData) => void) => {
-      ipcRenderer.removeListener('calendar:data-updated', callback as any);
+      ipcRenderer.removeListener('calendar:data-updated', callback as never);
     },
+  },
+
+  // Notification Storage
+  notificationStorage: {
+    save: (notification: StoredNotification): Promise<IPCResponse<void>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.NOTIFICATION_SAVE, notification),
+    getUnshown: (): Promise<IPCResponse<StoredNotification[]>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.NOTIFICATION_GET_ALL),
+    markShown: (notificationId: string): Promise<IPCResponse<void>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.NOTIFICATION_MARK_SHOWN, notificationId),
+    markDismissed: (notificationId: string): Promise<IPCResponse<void>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.NOTIFICATION_MARK_DISMISSED, notificationId),
+    cleanup: (): Promise<IPCResponse<void>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.NOTIFICATION_CLEANUP_OLD),
+    exists: (notificationId: string): Promise<IPCResponse<boolean>> => 
+      ipcRenderer.invoke(IPC_CHANNELS.NOTIFICATION_EXISTS, notificationId),
   },
 };
 
