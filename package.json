@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A modern desktop application to assist with your daily tasks",
   "main": ".webpack/main",
+  "author": "Martín Etchebarne",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
